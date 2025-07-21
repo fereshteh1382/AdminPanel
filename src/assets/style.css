@@ -164,14 +164,14 @@ header {
   transition: all 0.3s ease;
 }
 
-#login:checked ~ label[for="login"],
-#register:checked ~ label[for="register"] {
+#add:checked ~ label[for="add"],
+#view:checked ~ label[for="view"] {
   background-color: #0098a5;
   color: white;
 }
 
-/* فرم‌ها */
-/*.form-box {
+
+.form-box {
   position: relative;
   background: #fff;
   border-radius: 10px;
@@ -179,19 +179,15 @@ header {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.form {
-  display: none;
-  flex-direction: column;
-  gap: 15px;
-}
 
-.form input {
+
+form input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.form button {
+form button {
   padding: 10px;
   background: #007bff;
   color: white;
@@ -199,5 +195,5 @@ header {
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-}*/
+}
 
