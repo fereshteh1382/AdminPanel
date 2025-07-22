@@ -15,7 +15,7 @@ export default function pageCreate() {
       <input type="radio" name="toggle" id="view" onClick={()=>setActiveform('view')}/>
       <label htmlFor="view">View Data</label>
     </div>
-   <div>
+   <div >
       {activeform==='add' ? <AddFormCreate/> : <ViewFormResult/>}
 
    </div>
