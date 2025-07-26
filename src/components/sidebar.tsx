@@ -31,14 +31,14 @@ console.log(openMenu);
                     <li>
                         <span onClick={() => ToggleMenu('pages')} className="menu-item">
                       
-                        Pages  <i className={`fas fa-bars ${openMenu.pages?'menu-icon-open':'menu-icon'}`}></i> 
+                        <i className={`fas fa-bars ${openMenu.pages?'menu-icon-open':'menu-icon'}`}></i>  Pages  
 
                         </span>
                         {openMenu.pages && (
                             <ul className="submenu">
-                                <li><NavLink to="/pages/create">CreatePage <i className="fas fa-edit icon-left"></i></NavLink>  </li>
-                                <li><NavLink to="/pages/edit">EditPage<i className="fas fa-edit icon-left"></i></NavLink></li>
-                                <li><NavLink to="/pages/group">CreateCategory <i className="fas fa-edit icon-left"></i></NavLink></li>
+                                <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreatePage </NavLink>  </li>
+                                <li><NavLink to="/pages/edit"><i className="fas fa-edit icon-left"></i>EditPage</NavLink></li>
+                                <li><NavLink to="/pages/group"><i className="fas fa-edit icon-left"></i>CreateCategory </NavLink></li>
                             </ul>
                         )}
 
@@ -46,14 +46,14 @@ console.log(openMenu);
                     <li>
                         <span onClick={() => ToggleMenu('users')} className="menu-item">
                       
-                        Users  <i className={`fas fa-bars ${openMenu.users?'menu-icon-open':'menu-icon'}`}></i> 
+                        <i className={`fas fa-bars ${openMenu.users?'menu-icon-open':'menu-icon'}`}></i>  Users 
 
                         </span>
                         {openMenu.users && (
                             <ul className="submenu">
-                                <li><NavLink to="/pages/create">CreateUser <i className="fas fa-edit icon-left"></i></NavLink>  </li>
-                                <li><NavLink to="/pages/edit">EditUser<i className="fas fa-edit icon-left"></i></NavLink></li>
-                                <li><NavLink to="/pages/group">AssignUser <i className="fas fa-edit icon-left"></i></NavLink></li>
+                                <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreateUser </NavLink>  </li>
+                                <li><NavLink to="/pages/edit"><i className="fas fa-edit icon-left"></i>EditUser</NavLink></li>
+                                <li><NavLink to="/pages/group"><i className="fas fa-edit icon-left"></i>AssignUser </NavLink></li>
                             </ul>
                         )}
 

@@ -8,6 +8,8 @@ export default function mainlayout() {
     <div className="layout-container">
       <Header />
       <div className="main-content-wrapper">
+       
+        <Sidebar />
         <div className="main-content">
           <div className="breadcrumd">Breadcrumd</div>
           <div className="inner-page">
@@ -16,7 +18,6 @@ export default function mainlayout() {
           </div>
 
         </div>
-        <Sidebar />
       </div>
     </div>
   )
