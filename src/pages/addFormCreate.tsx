@@ -64,11 +64,7 @@ export default function addFormCreate() {
                         </select>
                         {errors.language && <p className="error-text">{errors.language.message}</p>}
                     </div>
-                    {/*  <div className="form-group">
-                        <label>Date</label>
-                        <input {...register("createDate")} />
-                        {errors.createDate && <p className="error-text">{errors.createDate.message}</p>}
-                    </div> */}
+                   
                     <div className="form-group">
                         <Controller
                             control={control}

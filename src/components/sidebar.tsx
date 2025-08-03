@@ -37,7 +37,7 @@ console.log(openMenu);
                         {openMenu.pages && (
                             <ul className="submenu">
                                 <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreatePage </NavLink>  </li>
-                                <li><NavLink to="/pages/edit"><i className="fas fa-edit icon-left"></i>EditPage</NavLink></li>
+                                <li><NavLink to="/pages/multiform"><i className="fas fa-edit icon-left"></i>MultiStepForm</NavLink></li>
                                 <li><NavLink to="/pages/group"><i className="fas fa-edit icon-left"></i>CreateCategory </NavLink></li>
                             </ul>
                         )}
