@@ -1,51 +1,60 @@
-import  { useState } from 'react'
+import { useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useValidators } from '../hooks/useValidators';
 import '../assets/style.css';
-
-type FormData = {
-    location: string;
-    roles: string;
-    name: string;
-    phone: string;
-    certification: FileList
-
-}
+import { useFormDataContext } from "../features/users/components/multiformcontext"
+import MultiFormView1 from "./MultiFormView1"
 export default function MultiStepForm() {
 
     const [step, setStep] = useState(1);
     const [complete, setComplete] = useState<{ [key: number]: boolean }>({});
     const { register, handleSubmit, getValues, trigger, formState: { errors } } = useForm<FormData>();
     const { isOnlyLetters, isValidPhone, isValidFile } = useValidators();
+    const { data, setData } = useFormDataContext();
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        console.log(data);
+        // console.log(data);save in db
         setComplete(prev => ({ ...prev, [3]: true }));
         setStep(4);
     }
+    console.log(data);
     const nextStep = async (s: number) => {
 
         let valid = false;
 
         if (s === 1) {
             valid = await trigger("location");
-            console.log("validation step1:", valid);
+            if (valid) {
+                setData({ location: getValues("location") });
+
+            }
+
+            //  console.log("validation step1:", valid);
         } else if (s === 2) {
             valid = await trigger("roles");
-            console.log("validation step2:", valid);
+            if (valid) {
+                setData({ roles: getValues("roles") });
+
+            }
         }
         else if (s === 3) {
-            // const isNameValid = await trigger("name");
-            //  const isPhoneValid = await trigger("phone");
-            //  valid = isNameValid && isPhoneValid;
+
             valid = await trigger(["name", "phone", "certification"]);
-            console.log("validation step3:", valid);
+            if (valid) {
+                setData({
+                    name: getValues("name"),
+                    phone: getValues("phone"),
+                    certification: getValues("certification")
+                });
+
+
+            }
         }
         if (valid) {
             setComplete(prev => ({ ...prev, [s]: true }));
             //setStep((prev) => prev + 1);
             setStep(s + 1);
-            console.log(complete);
+            //  console.log(complete);
         } else {
             //  alert("لطفاً فیلدهای این مرحله را کامل و صحیح پر کنید.");
         }
@@ -124,10 +133,10 @@ export default function MultiStepForm() {
                 )}
                 {step === 2 && (
                     <div>
-                         <div className="summary-box">
-                        <ul>
-                            <li><strong>Location:</strong> {getValues("location")}<i className="fas fa-check-circle check-icon"></i></li>
-                        </ul>
+                        <div className="summary-box">
+                            <ul>
+                                <li><strong>Location:</strong> {data.location}<i className="fas fa-check-circle check-icon"></i></li>
+                            </ul>
                         </div>
                         <input
                             type="text"
@@ -146,11 +155,11 @@ export default function MultiStepForm() {
                 {step === 3 && (
 
                     <div>
-                          <div className="summary-box">
-                        <ul>
-                            <li><strong>Location:</strong> {getValues("location")}<i className="fas fa-check-circle check-icon"></i></li>
-                            <li><strong>Role:</strong> {getValues("roles")}<i className="fas fa-check-circle check-icon"></i></li>
-                        </ul>
+                        <div className="summary-box">
+                            <ul>
+                                <li><strong>Location:</strong> {data.location}<i className="fas fa-check-circle check-icon"></i></li>
+                                <li><strong>Role:</strong> {data.roles}<i className="fas fa-check-circle check-icon"></i></li>
+                            </ul>
                         </div>
                         <input
                             type="text"
@@ -195,25 +204,12 @@ export default function MultiStepForm() {
                     </div>
                 )}
                 {step === 4 && (
-                    <div className="success-message">
-                        <i className="fas fa-check-circle success-icon"></i>
-                        <h2>Success!</h2>
-                        <p>We've Recieved Your Application.</p>
-                        <div className="summary-box">
-                            <h3>Submitted Information</h3>
-                            <ul>
-                                <li><strong>Location:</strong> {getValues("location")}<i className="fas fa-check-circle check-icon"></i></li>
-                                <li><strong>Role:</strong> {getValues("roles")}<i className="fas fa-check-circle check-icon"></i></li>
-                                <li><strong>Name:</strong> {getValues("name")}<i className="fas fa-check-circle check-icon"></i></li>
-                                <li><strong>Phone:</strong> {getValues("phone")}<i className="fas fa-check-circle check-icon"></i></li>
-                                <li><strong>Certification:</strong> {getValues("certification")?.[0]?.name}<i className="fas fa-check-circle check-icon"></i></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <MultiFormView1 />
 
 
                 )}
             </form>
+
         </div>
     )
 }
