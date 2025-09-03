@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
-type Menukey={
-pages:boolean,
-users:boolean
+type Menukey = {
+    pages: boolean,
+    users: boolean
 }
 export default function sidebar() {
 
     const [openMenu, setOpenMenu] = useState<Menukey>({ pages: false, users: false });
 
-    const ToggleMenu = (m:keyof Menukey) => {
+    const ToggleMenu = (m: keyof Menukey) => {
         setOpenMenu((prev) => ({
             ...prev,
             [m]: !prev[m],
         }))
-console.log(openMenu);
+        console.log(openMenu);
     }
 
 
@@ -30,30 +30,33 @@ console.log(openMenu);
 
                     <li>
                         <span onClick={() => ToggleMenu('pages')} className="menu-item">
-                      
-                        <i className={`fas fa-bars ${openMenu.pages?'menu-icon-open':'menu-icon'}`}></i>  Pages  
+
+                            <i className={`fas fa-bars ${openMenu.pages ? 'menu-icon-open' : 'menu-icon'}`}></i>  Pages
 
                         </span>
                         {openMenu.pages && (
                             <ul className="submenu">
                                 <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreatePage </NavLink>  </li>
                                 <li><NavLink to="/pages/multiform"><i className="fas fa-edit icon-left"></i>MultiStepForm</NavLink></li>
-                                <li><NavLink to="/pages/group"><i className="fas fa-edit icon-left"></i>CreateCategory </NavLink></li>
+                                <li><NavLink to="/pages/province"><i className="fas fa-edit icon-left"></i>Province</NavLink></li>
+                                <li><NavLink to="/pages/modal"><i className="fas fa-edit icon-left"></i>Modal</NavLink></li>
+
                             </ul>
                         )}
 
                     </li>
                     <li>
                         <span onClick={() => ToggleMenu('users')} className="menu-item">
-                      
-                        <i className={`fas fa-bars ${openMenu.users?'menu-icon-open':'menu-icon'}`}></i>  Users 
+
+                            <i className={`fas fa-bars ${openMenu.users ? 'menu-icon-open' : 'menu-icon'}`}></i>  Users
 
                         </span>
                         {openMenu.users && (
                             <ul className="submenu">
                                 <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreateUser </NavLink>  </li>
                                 <li><NavLink to="/pages/edit"><i className="fas fa-edit icon-left"></i>EditUser</NavLink></li>
-                                <li><NavLink to="/pages/group"><i className="fas fa-edit icon-left"></i>AssignUser </NavLink></li>
+                                <li><NavLink to="/pages/province"><i className="fas fa-edit icon-left"></i>AssignUser </NavLink></li>
+
                             </ul>
                         )}
 
