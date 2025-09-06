@@ -4,31 +4,35 @@ import { useEffect, useRef } from "react";
 
 export default function ProvinceList() {
     const { watch, control } = useForm()
-    const stateId = watch('state_id');
-    const ACRef = useRef();
-
+    //const stateId = watch('state_id');
+    const ACRef = useRef<any>(null);
+   
     useEffect(() => {
-        if (ACRef.current) { console.log(ACRef.current.name) }
+        if (ACRef.current) { console.log(ACRef.current) }
     }, [ACRef.current])
 
     return (
+        
         <form>
+            
             <AutomaticDropDown
-                endpoint="states"
-                showfield="name"
+                endpoint="/provincelist.json"
+                showfield="province"
                 control={control}
-                name="state_id"
+                name="province"
                 ref={ACRef}
             />
 
             <AutomaticDropDown
-                endpoint="cities"
-                showfield="name"
+                endpoint="/provincelist.json"
+                showfield="cities"
                 control={control}
-                name="city_id"
+                name="citiy"
 
 
             />
         </form>
+        
     )
+    
 }

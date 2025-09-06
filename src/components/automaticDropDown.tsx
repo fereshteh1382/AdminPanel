@@ -1,59 +1,89 @@
-import { Autocomplete, Input } from "@mui/joy"
-import { forwardRef, useEffect, useState } from "react"
+import { Autocomplete,Input} from "@mui/joy";
 import { Controller, type Control } from "react-hook-form";
-import { api } from "../configs/config"
+import { forwardRef,useEffect, useState } from "react";
 
 interface Props {
-    endpoint: string;
-    showfield: string;
-    control: Control;
-    name: string;
-    params?: any;
-    ref?: any;
+  endpoint: string;
+  showfield: string; 
+  control: Control;
+  name: string;
 }
 interface Item {
     id: number;
 
 }
-const InnerAutomaticDropDown = ({ endpoint, showfield, control, name, params }: Props, ref: any) => {
+const AutomaticDropDown = ({ endpoint, showfield, control, name}: Props, ref: any) => {
 
-    //export default function AutomaticDropDown({ endpoint, showfield, control, name, params, ref }: Props) {
-    const [items, setItems] = useState<any[]>([])
-    const [item, setItem] = useState<Item | null>();
+/*export default function AutomaticDropDown({
+  endpoint,
+  showfield,
+  control,
+  name,
+}: Props) {*/
+  const [items, setItems] = useState<any[]>([]);
+  const [item, setItem] = useState<Item | null>();
 
-    useEffect(() => {
-        if (ref) {
-            ref.current = item;
+  useEffect(() => {
+    if (ref) {
+        ref.current = item;
+    }
+}, [item]);
+
+  useEffect(() => {
+    fetch(endpoint)
+      .then((res) => res.json())
+      .then((data) => {
+       
+        if (showfield === "province") {
+          setItems(data.map((p: any) => p.province));
+        } else if (showfield === "cities") {
+          const allCities = data.flatMap((p: any) => p.cities);
+          setItems(allCities);
         }
-    }, [item]);
-    useEffect(() => {
-        api.get(endpoint, {
-            params
-        }).then(res => setItems(res.data))
-    }, [params])
-    console.log(items)
-    return (
-        <Controller
-            control={control}
-            name={name}
-            render={({ field: { onChange } }) => (
-                <Autocomplete
-                    options={items}
-                    getOptionLabel={item => item[showfield]}
-                    onChange={(_, v) => {
-                        onChange(v ? v.id : undefined);
-                        setItem(v);
-                    }}
-                    slotProps={{
-                        input: {}
-                    }
-                    }
-                    sx={{
-                        mx: { xs: 1, sm: 2 }
-                    }}
-                />
-            )}
+      });
+  }, [endpoint, showfield]);
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        
+        <Autocomplete
+          placeholder="انتخاب کنید..."
+          options={items}
+          getOptionLabel={(item) => (typeof item === "string" ? item : "")}
+          value={value || null}
+          onChange={(_, v) => {
+            onChange(v || null);  // برای react-hook-form
+            setItem(v || null);    // برای ref
+        }}
+          slotProps={{
+            input: {
+              sx: {
+                fontFamily: "Vazir, sans-serif",
+                textAlign: "right",
+                fontSize: "0.95rem",
+                padding: "8px 12px",
+                direction:"rtl",
+              },
+            },
+            
+          }}
+          sx={{
+            direction: "rtl",
+            width: 600,
+            "& .JoyList-root": { textAlign: "right" },
+            "& .JoyOption-root": {
+              fontFamily: "Vazir, sans-serif",
+              fontSize: "0.95rem",
+              
+            },
+            
+          }}
         />
-    )
+      )}
+    />
+  );
 }
-export default forwardRef(InnerAutomaticDropDown);
+export default forwardRef(AutomaticDropDown);
