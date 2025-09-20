@@ -9,6 +9,7 @@ import NotFound from './pages/notFound'
 import MultiFormHome from './pages/MultiFormHome';
 import MultiFormContextCall from './features/users/components/multiFormContextCall';
 import ProvinceList from './pages/provinceList'
+import AddFormRepeat from './features/AddFormRepeat'
 //import Modal from './components/modal';
 
 createRoot(document.getElementById('root')!).render(
@@ -20,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="pages/create" element={<PageCreate />} />
             <Route path="pages/multiform" element={<MultiFormHome />} />
             <Route path="pages/province" element={<ProvinceList />} />
-            {/* <Route path="pages/modal" element={<Modal />} />  */}
+             <Route path="pages/add-form-repeat" element={<AddFormRepeat />} /> 
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

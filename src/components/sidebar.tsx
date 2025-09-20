@@ -36,14 +36,16 @@ export default function sidebar() {
                         </span>
                         {openMenu.pages && (
                             <ul className="submenu">
-                                <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>ToFoList</NavLink></li>
+                               {/*  <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>ToFoList</NavLink></li>
                                 <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>Calculator</NavLink></li>
-                                <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>Slider</NavLink></li>
+                                <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>Slider</NavLink></li> */}
                                 <li><NavLink to="/pages/create"><i className="fas fa-edit icon-left"></i>CreateForm </NavLink>  </li>
                                 <li><NavLink to="/pages/multiform"><i className="fas fa-edit icon-left"></i>MultiStepForm</NavLink></li>
                                 <li><NavLink to="/pages/province"><i className="fas fa-edit icon-left"></i>Province</NavLink></li>
-                                <li><NavLink to="/pages/modal"><i className="fas fa-edit icon-left"></i>Modal</NavLink></li>
-                                <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>Motion</NavLink></li>
+                                <li><NavLink to="/pages/add-form-repeat"><i className="fas fa-edit icon-left"></i>AddFormRepeat</NavLink></li>
+
+                               {/*  <li><NavLink to="/pages/modal"><i className="fas fa-edit icon-left"></i>Modal</NavLink></li>
+                                <li><NavLink to="/pages/motion"><i className="fas fa-edit icon-left"></i>Motion</NavLink></li> */}
 
 
                             </ul>
