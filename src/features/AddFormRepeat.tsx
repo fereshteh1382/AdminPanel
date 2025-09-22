@@ -1,6 +1,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 
 const brotherSchema = z.object({
@@ -25,6 +26,7 @@ const formSchema = z.object({
 type FormType = z.infer<typeof formSchema>;
 
 export default function BrothersForm() {
+
   const {
     register,
     control,
@@ -44,12 +46,34 @@ export default function BrothersForm() {
     control,
     name: "brothers",
   });
+  const [images, setImages] = useState<{ file: File; url: string }[]>([]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+
+    const newFiles = Array.from(e.target.files).map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+
+    setImages((prev) => [...prev, ...newFiles]);
+  };
+  // 📌 حذف یک تصویر
+  const handleRemove = (index: number) => {
+    setImages((prev) => {
+      const updated = [...prev];
+      // آزاد کردن URL blob
+      URL.revokeObjectURL(updated[index].url);
+      updated.splice(index, 1);
+      return updated;
+    });
+  };
   const onSubmit = (data: FormType) => {
     console.log("✅ Submitted Data:", data);
   };
 
   return (
+
     <form
       onSubmit={handleSubmit(onSubmit)}
       style={{
@@ -181,15 +205,65 @@ export default function BrothersForm() {
           </div>
           {/* آپلود فایل */}
           <div>
-            <label>آپلود فایل</label>
-            <input type="file" {...register(`brothers.${index}.file`)} />
+            <label>File </label>
+            <input type="file" {...register(`brothers.${index}.file`)} accept="image/*" multiple onChange={handleFileChange} />
             {errors.brothers?.[index]?.file && (
               <p style={{ color: "red" }}>{errors.brothers[index]?.file?.message}</p>
             )}
           </div>
-          <div>***</div>
-          <button type="button" className="btn btn-danger" onClick={() => remove(index)} style={{ width: "20%" }}>
-            Remove
+          <div></div>
+          {/* پیش‌نمایش */}
+          
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              marginTop: "15px",
+            }}
+          >
+             
+            {images.map((img, index) => (
+              <div
+                key={index}
+                style={{
+                  position: "relative",
+                  width: "120px",
+                  height: "120px",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                }}
+              >
+                <img
+                  src={img.url}
+                  alt={`preview-${index}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemove(index)}
+                  style={{
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    background: "rgba(0,0,0,0.6)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    width: "24px",
+                    height: "24px",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+          <div></div>
+          <button type="button" className="btn btn-danger" onClick={() => remove(index)} style={{ width: "30%" }}>
+            - Remove Brother
           </button>
         </div>
       ))}
