@@ -12,6 +12,9 @@ const brotherSchema = z.object({
   phone: z.string().regex(/^09\d{9}$/, "Invalid phone number"),
   education: z.enum(["Diploma", "Bachelor", "Master", "PhD"]),
   Marriage: z.enum(["Marrid", "Single", "Other"]),
+  file: z.any().refine((file) => file?.length > 0, "آپلود فایل الزامی است"),
+  // files:z.array(z.any(),)
+  //age:z.coerce.number()
 });
 
 // 🎯 اسکیمای کل فرم (لیست برادرها)
@@ -32,7 +35,7 @@ export default function BrothersForm() {
 
     defaultValues: {
       brothers: [
-        { name: "", education: "Diploma", Marriage: "Single", age: "", Birthday: "", Job: "", Address: "", phone: "" },
+        { name: "", education: "Diploma", Marriage: "Single", age: "", Birthday: "", Job: "", Address: "", phone: "", file: undefined },
       ],
     },
   });
@@ -53,8 +56,9 @@ export default function BrothersForm() {
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        
+
       }}
+
     >
       <h2>Brothers Info</h2>
 
@@ -68,8 +72,8 @@ export default function BrothersForm() {
             marginBottom: "8px",
           }}
           className="form-grid"
-          >
-          
+        >
+
 
           {/* Name */}
           <div >
@@ -81,8 +85,8 @@ export default function BrothersForm() {
               </p>
             )}
           </div>
-         {/* Education */}
-         <div>
+          {/* Education */}
+          <div>
             <label>Education</label>
             <select {...register(`brothers.${index}.education`)}>
               <option value="Diploma">Diploma</option>
@@ -99,7 +103,7 @@ export default function BrothersForm() {
           {/* Marriage */}
           <div>
             <label>Marriage</label>
-           
+
             <select {...register(`brothers.${index}.Marriage`)} >
               <option value="Marrid">Marrid</option>
               <option value="Single">Single</option>
@@ -115,7 +119,7 @@ export default function BrothersForm() {
           {/* Age */}
           <div>
             <label>Age</label>
-            <input  type="number"
+            <input type="number"
               {...register(`brothers.${index}.age`)}
               placeholder="Age"
             />
@@ -159,8 +163,8 @@ export default function BrothersForm() {
               </p>
             )}
           </div>
-           {/* Address */}
-           <div>
+          {/* Address */}
+          <div>
             <label>Address</label>
             <textarea
               {...register(`brothers.${index}.Address`)}
@@ -168,14 +172,23 @@ export default function BrothersForm() {
               rows={3}
               style={{ width: "100%" }}
             />
-           
+
             {errors.brothers?.[index]?.Address && (
               <p style={{ color: "red" }}>
                 {errors.brothers[index]?.Address?.message}
               </p>
             )}
           </div>
-          <button type="button" className="btn btn-danger" onClick={() => remove(index)} style={{width:"20%"}}>
+          {/* آپلود فایل */}
+          <div>
+            <label>آپلود فایل</label>
+            <input type="file" {...register(`brothers.${index}.file`)} />
+            {errors.brothers?.[index]?.file && (
+              <p style={{ color: "red" }}>{errors.brothers[index]?.file?.message}</p>
+            )}
+          </div>
+          <div>***</div>
+          <button type="button" className="btn btn-danger" onClick={() => remove(index)} style={{ width: "20%" }}>
             Remove
           </button>
         </div>
@@ -185,9 +198,9 @@ export default function BrothersForm() {
       <button
         type="button"
         className="btn btn-danger"
-        onClick={() => append({ name: "", education: "Diploma", Marriage: "Single", age: "", Birthday: "", Job: "", Address: "", phone: ""})}
-        style={{width:"10%"}}
-        >
+        onClick={() => append({ name: "", education: "Diploma", Marriage: "Single", age: "", Birthday: "", Job: "", Address: "", phone: "", file: undefined })}
+        style={{ width: "10%" }}
+      >
         + Add Brother
       </button>
 
@@ -199,7 +212,7 @@ export default function BrothersForm() {
         )}
 
 
-      <button type='submit' className="btn btn-primary" style={{width:"20%"}}> Save</button>
+      <button type='submit' className="btn btn-primary" style={{ width: "20%" }}> Save</button>
 
 
     </form>
