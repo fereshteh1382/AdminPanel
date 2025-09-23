@@ -14,6 +14,11 @@ const brotherSchema = z.object({
   education: z.enum(["Diploma", "Bachelor", "Master", "PhD"]),
   Marriage: z.enum(["Marrid", "Single", "Other"]),
   file: z.any().refine((file) => file?.length > 0, "آپلود فایل الزامی است"),
+  // تغییر اسکیمای فایل: می‌تونی چک کنی که چندتا فایل وجود داشته باشه
+  /*file: z
+    .any()
+    .refine((files) => files instanceof FileList && files.length > 0, "آپلود فایل الزامی است"),
+  */
   // files:z.array(z.any(),)
   //age:z.coerce.number()
 });
@@ -46,9 +51,10 @@ export default function BrothersForm() {
     control,
     name: "brothers",
   });
-  const [images, setImages] = useState<{ file: File; url: string }[]>([]);
+  //const [images, setImages] = useState<{ file: File; url: string }[]>([]);
+  const [images, setImages] = useState<Record<number, { file: File; url: string }[]>>({});
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, brotherIndex: number) => {
     if (!e.target.files) return;
 
     const newFiles = Array.from(e.target.files).map((file) => ({
@@ -56,20 +62,28 @@ export default function BrothersForm() {
       url: URL.createObjectURL(file),
     }));
 
-    setImages((prev) => [...prev, ...newFiles]);
+    // setImages((prev) => [...prev, ...newFiles]);
+    setImages((prev) => ({
+      ...prev,
+      [brotherIndex]: [...(prev[brotherIndex] || []), ...newFiles],
+    }));
   };
   // 📌 حذف یک تصویر
-  const handleRemove = (index: number) => {
+  const handleRemove = (brotherIndex: number, imageIndex: number) => {
     setImages((prev) => {
-      const updated = [...prev];
-      // آزاد کردن URL blob
-      URL.revokeObjectURL(updated[index].url);
-      updated.splice(index, 1);
+      const updated = { ...(prev || {}) };
+      const newArr = [...(updated[brotherIndex] || [])];
+      URL.revokeObjectURL(newArr[imageIndex].url);
+      newArr.splice(imageIndex, 1);
+      updated[brotherIndex] = newArr;
       return updated;
     });
   };
   const onSubmit = (data: FormType) => {
     console.log("✅ Submitted Data:", data);
+    Object.entries(images).forEach(([brotherIndex, files]) => {
+      console.log("Brother:", brotherIndex, "Files:", files.map(f => f.file.name));
+    });
   };
 
   return (
@@ -206,14 +220,19 @@ export default function BrothersForm() {
           {/* آپلود فایل */}
           <div>
             <label>File </label>
-            <input type="file" {...register(`brothers.${index}.file`)} accept="image/*" multiple onChange={handleFileChange} />
+            <input type="file"
+              /*  {...register(`brothers.${index}.file`)} */
+              accept="image/*"
+              multiple
+              onChange={(e) => { handleFileChange(e, index) }}
+            />
             {errors.brothers?.[index]?.file && (
               <p style={{ color: "red" }}>{errors.brothers[index]?.file?.message}</p>
             )}
           </div>
           <div></div>
           {/* پیش‌نمایش */}
-          
+
           <div
             style={{
               display: "flex",
@@ -222,10 +241,10 @@ export default function BrothersForm() {
               marginTop: "15px",
             }}
           >
-             
-            {images.map((img, index) => (
+
+            {(images[index] || []).map((img, imgIndex) => (
               <div
-                key={index}
+                key={imgIndex}
                 style={{
                   position: "relative",
                   width: "120px",
@@ -237,12 +256,12 @@ export default function BrothersForm() {
               >
                 <img
                   src={img.url}
-                  alt={`preview-${index}`}
+                  alt={`preview-${imgIndex}`}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
                 <button
                   type="button"
-                  onClick={() => handleRemove(index)}
+                  onClick={() => handleRemove(index, imgIndex)}
                   style={{
                     position: "absolute",
                     top: "5px",
@@ -262,7 +281,8 @@ export default function BrothersForm() {
             ))}
           </div>
           <div></div>
-          <button type="button" className="btn btn-danger" onClick={() => remove(index)} style={{ width: "30%" }}>
+          <button type="button" className="btn btn-danger"
+            onClick={() => remove(index)} style={{ width: "30%" }}>
             - Remove Brother
           </button>
         </div>
@@ -273,7 +293,7 @@ export default function BrothersForm() {
         type="button"
         className="btn btn-danger"
         onClick={() => append({ name: "", education: "Diploma", Marriage: "Single", age: "", Birthday: "", Job: "", Address: "", phone: "", file: undefined })}
-        style={{ width: "10%" }}
+        style={{ width: "20%" }}
       >
         + Add Brother
       </button>
